@@ -1,0 +1,146 @@
+[
+  {
+    "timestamp": "2026-08-07T16:24:27.845654",
+    "customer_id": "CUST-101",
+    "order_id": "ORD-9900",
+    "claim_amount": 799.99,
+    "claim_description": "Item arrived damaged upon delivery.",
+    "fraud_score": 0.0,
+    "escalated": true,
+    "escalation_reason": "High-value claim threshold exceeded (>$500)",
+    "proposed_resolution": {
+      "action": "STANDARD_RETURN",
+      "confidence": 0.8,
+      "approved_amount": 799.99,
+      "explanation": "Standard return window applies."
+    },
+    "execution_result": null,
+    "status": "PENDING_HUMAN_REVIEW"
+  },
+  {
+    "timestamp": "2026-08-07T16:38:34.139387",
+    "customer_id": "CUST-999",
+    "order_id": "ORD-9900",
+    "claim_amount": 799.99,
+    "claim_description": "Item arrived damaged upon delivery.",
+    "fraud_score": 100.0,
+    "escalated": true,
+    "escalation_reason": "High-value claim threshold exceeded (>$500); High fraud risk score detected (>70/100)",
+    "proposed_resolution": {
+      "action": "STANDARD_RETURN",
+      "confidence": 0.8,
+      "approved_amount": 799.99,
+      "explanation": "Standard return window applies."
+    },
+    "execution_result": null,
+    "status": "PENDING_HUMAN_REVIEW"
+  },
+  {
+    "timestamp": "2026-08-07T16:51:42.112885",
+    "customer_id": "CUST-101",
+    "order_id": "ORD-8821",
+    "claim_amount": 149.99,
+    "claim_description": "Item arrived damaged upon delivery.",
+    "fraud_score": 0.0,
+    "escalated": true,
+    "escalation_reason": "Low resolution confidence score (<60%)",
+    "proposed_resolution": {
+      "action": "CLAIM_DENIED_UNVERIFIED_EVIDENCE",
+      "confidence": 0.2,
+      "approved_amount": 0.0,
+      "explanation": "Claim description specifies damage, but visual evidence shows an undamaged item."
+    },
+    "execution_result": null,
+    "status": "PENDING_HUMAN_REVIEW"
+  },
+  {
+    "timestamp": "2026-08-07T16:53:10.264712",
+    "customer_id": "CUST-101",
+    "order_id": "ORD-8821",
+    "claim_amount": 149.99,
+    "claim_description": "Item arrived damaged upon delivery.",
+    "fraud_score": 0.0,
+    "escalated": true,
+    "escalation_reason": "Low resolution confidence score (<60%)",
+    "proposed_resolution": {
+      "action": "CLAIM_DENIED_UNVERIFIED_EVIDENCE",
+      "confidence": 0.2,
+      "approved_amount": 0.0,
+      "explanation": "Claim description specifies damage, but visual evidence shows an undamaged item."
+    },
+    "execution_result": null,
+    "status": "PENDING_HUMAN_REVIEW"
+  },
+  {
+    "timestamp": "2026-08-07T17:19:23.185117",
+    "customer_id": "CUST-101",
+    "order_id": "ORD-8821",
+    "claim_amount": 149.99,
+    "claim_description": "Item arrived damaged upon delivery.",
+    "fraud_score": 0.0,
+    "escalated": true,
+    "escalation_reason": "Low resolution confidence score (<60%)",
+    "proposed_resolution": {
+      "action": "CLAIM_DENIED_UNVERIFIED_EVIDENCE",
+      "confidence": 0.2,
+      "approved_amount": 0.0,
+      "explanation": "Claim description specifies damage, but visual evidence shows an undamaged item."
+    },
+    "execution_result": null,
+    "status": "PENDING_HUMAN_REVIEW"
+  },
+  {
+    "timestamp": "2026-08-07T17:27:09.488749",
+    "customer_id": "CUST-101",
+    "order_id": "ORD-8821",
+    "claim_amount": 149.99,
+    "claim_description": "Item arrived damaged upon delivery.",
+    "fraud_score": 0.0,
+    "escalated": true,
+    "escalation_reason": "Low resolution confidence score (<60%)",
+    "proposed_resolution": {
+      "action": "CLAIM_DENIED_UNVERIFIED_EVIDENCE",
+      "confidence": 0.2,
+      "approved_amount": 0.0,
+      "explanation": "Claim description specifies damage, but visual evidence shows an undamaged item."
+    },
+    "execution_result": null,
+    "status": "PENDING_HUMAN_REVIEW"
+  },
+  {
+    "timestamp": "2026-08-07T17:30:20.513930",
+    "customer_id": "CUST-101",
+    "order_id": "ORD-8821",
+    "claim_amount": 149.99,
+    "claim_description": "Item arrived damaged upon delivery.",
+    "fraud_score": 0.0,
+    "escalated": true,
+    "escalation_reason": "Low resolution confidence score (<60%)",
+    "proposed_resolution": {
+      "action": "CLAIM_DENIED_UNVERIFIED_EVIDENCE",
+      "confidence": 0.2,
+      "approved_amount": 0.0,
+      "explanation": "Claim description specifies damage, but visual evidence shows an undamaged item."
+    },
+    "execution_result": null,
+    "status": "PENDING_HUMAN_REVIEW"
+  },
+  {
+    "timestamp": "2026-08-07T17:30:35.247684",
+    "customer_id": "CUST-101",
+    "order_id": "ORD-8821",
+    "claim_amount": 149.99,
+    "claim_description": "Item arrived damaged upon delivery.",
+    "fraud_score": 0.0,
+    "escalated": true,
+    "escalation_reason": "Low resolution confidence score (<60%)",
+    "proposed_resolution": {
+      "action": "CLAIM_DENIED_UNVERIFIED_EVIDENCE",
+      "confidence": 0.2,
+      "approved_amount": 0.0,
+      "explanation": "Claim description specifies damage, but visual evidence shows an undamaged item."
+    },
+    "execution_result": null,
+    "status": "PENDING_HUMAN_REVIEW"
+  }
+]

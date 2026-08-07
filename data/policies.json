@@ -1,0 +1,22 @@
+[
+  {
+    "id": "POL-001",
+    "category": "Return Window",
+    "rule": "Standard returns are accepted within 30 days of delivery. High-value electronics must be returned within 14 days."
+  },
+  {
+    "id": "POL-002",
+    "category": "Item Condition",
+    "rule": "Products with verified physical or shipping damage qualify for a 100% full refund or immediate replacement, with return shipping fees waived."
+  },
+  {
+    "id": "POL-003",
+    "category": "Refund Limits",
+    "rule": "Automated instant refunds are capped at $500. Any claim exceeding $500 requires human manager approval."
+  },
+  {
+    "id": "POL-004",
+    "category": "Abuse & Fraud",
+    "rule": "Accounts with more than 3 claims in the last 90 days or a fraud score exceeding 70 are flagged for mandatory human review."
+  }
+]
