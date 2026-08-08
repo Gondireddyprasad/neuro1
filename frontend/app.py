@@ -6,12 +6,12 @@ import streamlit as st
 API_BASE_URL = "http://127.0.0.1:8000/api/v1"
 
 st.set_page_config(
-    page_title="NEURO - Universal Multi-Tenant Claim Engine",
+    page_title="NEURO - Enterprise Customer Experience Intelligence and Autonomous Dispute Resolution Agent",
     page_icon="🤖",
     layout="wide"
 )
 
-st.title("🛡️ NEURO: Universal Multi-Tenant Claim Engine")
+st.title("🛡️ NEURO: Enterprise Customer Experience Intelligence and Autonomous Dispute Resolution Agent")
 st.caption("Powered by LangGraph Multi-Agent Orchestration & Domain-Isolated ChromaDB Policy Search")
 st.markdown("---")
 
