@@ -1,46 +1,28 @@
-import json
-import os
 import chromadb
-from typing import List
+from chromadb.utils import embedding_functions
 
-# Initialize an in-memory ChromaDB client for vector storage
-chroma_client = chromadb.Client()
+client = chromadb.Client()
+embedding_func = embedding_functions.DefaultEmbeddingFunction()
 
-def setup_policy_vector_db():
-    """Indexes policies from policies.json into ChromaDB."""
-    collection = chroma_client.get_or_create_collection(name="policies")
-    
-    # Avoid re-indexing if already populated
-    if collection.count() > 0:
-        return collection
-        
-    policies_path = os.path.join(os.path.dirname(__file__), "../../data/policies.json")
-    
-    if os.path.exists(policies_path):
-        with open(policies_path, "r") as f:
-            policies = json.load(f)
-            
-        documents = [p["rule"] for p in policies]
-        metadatas = [{"category": p["category"]} for p in policies]
-        ids = [p["id"] for p in policies]
-        
-        # Add to ChromaDB vector store
-        collection.add(
-            documents=documents,
-            metadatas=metadatas,
-            ids=ids
+collection = client.get_or_create_collection(
+    name="enterprise_policies_deep",
+    embedding_function=embedding_func
+)
+
+def search_relevant_policies(query: str, platform_type: str = "E-Commerce Platforms", top_k: int = 2):
+    """Domain-isolated vector search using metadata filtering on 'platform'."""
+    try:
+        results = collection.query(
+            query_texts=[query],
+            n_results=top_k,
+            where={"platform": platform_type}
         )
-    return collection
-
-def search_relevant_policies(query: str, top_k: int = 2) -> List[str]:
-    """Retrieves the top-k most relevant policy rules for a query."""
-    collection = setup_policy_vector_db()
-    results = collection.query(
-        query_texts=[query],
-        n_results=top_k
-    )
-    
-    # Extract matching policy texts
-    if results and "documents" in results and len(results["documents"]) > 0:
-        return results["documents"][0]
-    return []
+        
+        retrieved_docs = []
+        if results and "documents" in results and results["documents"]:
+            for doc in results["documents"][0]:
+                retrieved_docs.append(doc)
+                
+        return retrieved_docs if retrieved_docs else [f"Standard {platform_type} domain terms apply."]
+    except Exception as e:
+        return [f"Standard {platform_type} policy applied (Vector search fallback: {str(e)})"]

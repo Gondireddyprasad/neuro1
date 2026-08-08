@@ -32,8 +32,13 @@
       "approved_amount": 799.99,
       "explanation": "Standard return window applies."
     },
-    "execution_result": null,
-    "status": "PENDING_HUMAN_REVIEW"
+    "execution_result": {
+      "status": "SUCCESS",
+      "transaction_id": "TXN-REFUND-ORD-9900",
+      "amount_refunded": 799.99,
+      "message": "Successfully processed refund of $799.99 for Order ORD-9900"
+    },
+    "status": "MANUALLY_APPROVED"
   },
   {
     "timestamp": "2026-08-07T16:51:42.112885",
@@ -69,7 +74,7 @@
       "explanation": "Claim description specifies damage, but visual evidence shows an undamaged item."
     },
     "execution_result": null,
-    "status": "PENDING_HUMAN_REVIEW"
+    "status": "MANUALLY_REJECTED"
   },
   {
     "timestamp": "2026-08-07T17:19:23.185117",
@@ -104,8 +109,13 @@
       "approved_amount": 0.0,
       "explanation": "Claim description specifies damage, but visual evidence shows an undamaged item."
     },
-    "execution_result": null,
-    "status": "PENDING_HUMAN_REVIEW"
+    "execution_result": {
+      "status": "SUCCESS",
+      "transaction_id": "TXN-REFUND-ORD-8821",
+      "amount_refunded": 149.99,
+      "message": "Successfully processed refund of $149.99 for Order ORD-8821"
+    },
+    "status": "MANUALLY_APPROVED"
   },
   {
     "timestamp": "2026-08-07T17:30:20.513930",
@@ -127,6 +137,24 @@
   },
   {
     "timestamp": "2026-08-07T17:30:35.247684",
+    "customer_id": "CUST-101",
+    "order_id": "ORD-8821",
+    "claim_amount": 149.99,
+    "claim_description": "Item arrived damaged upon delivery.",
+    "fraud_score": 0.0,
+    "escalated": true,
+    "escalation_reason": "Low resolution confidence score (<60%)",
+    "proposed_resolution": {
+      "action": "CLAIM_DENIED_UNVERIFIED_EVIDENCE",
+      "confidence": 0.2,
+      "approved_amount": 0.0,
+      "explanation": "Claim description specifies damage, but visual evidence shows an undamaged item."
+    },
+    "execution_result": null,
+    "status": "PENDING_HUMAN_REVIEW"
+  },
+  {
+    "timestamp": "2026-08-07T18:11:03.867783",
     "customer_id": "CUST-101",
     "order_id": "ORD-8821",
     "claim_amount": 149.99,
