@@ -8,6 +8,8 @@ from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
 
 from dotenv import load_dotenv
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_core.messages import SystemMessage, HumanMessage
 
 # Load variables from .env file
 load_dotenv()
@@ -22,6 +24,7 @@ from backend.db.storage_handler import (
     update_case_status
 )
 from backend.integrations.rag import search_relevant_policies
+from backend.db.customer_db import get_multi_domain_customer_context
 
 app = FastAPI(
     title="NEURO Engine API",
@@ -96,10 +99,14 @@ def submit_claim(payload: ClaimSubmissionPayload):
 
 @app.post("/api/v1/chat/intake")
 async def chat_intake_bot(payload: ChatIntakePayload):
-    """Customer Support Bot Endpoint: Parses chat prompts, runs graph execution, and saves to SQLite DB."""
+    """Customer Support Bot Endpoint: Fetches multi-domain SQLite context, runs Gemini reasoning, and logs tickets."""
     msg = payload.message.lower()
     
-    # 1. Extract dollar amounts directly from chat message if present (e.g., "30 dollars", "$30", "30$")
+    # 1. Fetch domain-specific record from SQLite DB
+    cust_data = get_multi_domain_customer_context(payload.customer_id)
+    domain_meta = cust_data.get("domain_metadata", {}) if cust_data else {}
+
+    # 2. Extract dollar amounts directly from chat message if present
     extracted_amount = 0.0
     amount_matches = re.findall(r'(?:\$|\b)(\d+(?:\.\d{1,2})?)\s*(?:dollars?|\$)?\b', msg)
     if amount_matches:
@@ -110,22 +117,64 @@ async def chat_intake_bot(payload: ChatIntakePayload):
 
     effective_amount = extracted_amount if extracted_amount > 0.0 else (payload.amount or 0.0)
 
-    # 2. Pure Informational FAQ Query Check ($0 amount + question keyword)
+    # 3. Pure Informational FAQ Query Check ($0 amount + question keyword)
     is_pure_faq = (effective_amount == 0.0) and any(k in msg for k in ["where is", "how do i", "policy", "hours", "status", "track", "cancel"])
     if is_pure_faq and not any(w in msg for w in ["claim", "refund", "lost", "broken", "damaged", "dollars", "money"]):
-        policies = search_relevant_policies(payload.message, platform_type=payload.industry, top_k=1)
-        reply_policy = policies[0] if policies else "Standard customer support terms apply."
+        
+        # Build LLM Prompt using retrieved SQLite metadata
+        system_instruction = f"""
+        You are an AI support assistant for {payload.industry}.
+        
+        Customer Profile (Retrieved from SQLite DB):
+        - Name: {cust_data.get('name', 'Valued Customer')} (ID: {payload.customer_id})
+        - Account Tier: {cust_data.get('account_tier', 'Standard')}
+        - Domain Metadata: {domain_meta}
+
+        Instructions:
+        1. Answer the customer query politely and concisely using the domain metadata above (e.g. tracking numbers, status, or transaction IDs).
+        2. Keep the answer to 2-3 sentences max.
+        """
+
+        llm = ChatGoogleGenerativeAI(
+            model="gemini-1.5-flash",
+            google_api_key=os.getenv("GEMINI_API_KEY"),
+            max_output_tokens=250
+        )
+
+        try:
+            messages = [
+                SystemMessage(content=system_instruction),
+                HumanMessage(content=payload.message)
+            ]
+            response = await asyncio.to_thread(llm.invoke, messages)
+            reply_text = response.content
+
+        except Exception as e:
+            # Clean Fallback Formatting if Gemini API hits limits or fails
+            formatted_details = []
+            for key, val in domain_meta.items():
+                formatted_key = key.replace("_", " ").title()
+                formatted_details.append(f"• **{formatted_key}:** {val}")
+            
+            details_str = "\n".join(formatted_details) if formatted_details else "No active records."
+
+            reply_text = (
+                f"Hello {cust_data.get('name', 'Valued Customer')}, I located your record in our database:\n\n"
+                f"{details_str}\n\n"
+                f"Your request has been logged and queued for support."
+            )
+
         return {
             "type": "FAQ_RESOLVED",
-            "reply": f"🤖 **AI Support Bot:** Here is the policy information regarding your inquiry:\n\n_{reply_policy}_",
+            "reply": reply_text,
             "scheduled_to_db": False
         }
 
-    # 3. Dispute/Claim Multi-Agent Graph Execution
+    # 4. Dispute/Claim Multi-Agent Graph Execution
     initial_state = {
         "industry": payload.industry,
         "customer_id": payload.customer_id,
-        "order_id": "ORD-CHAT-BOT",
+        "order_id": domain_meta.get("active_order_id", "ORD-CHAT-BOT"),
         "claim_description": payload.message,
         "claim_amount": effective_amount,
         "image_path": None,

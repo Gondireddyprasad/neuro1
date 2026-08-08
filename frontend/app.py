@@ -63,7 +63,14 @@ with tab1:
     with left_col:
         st.markdown("### 💬 Interactive Customer Support Assistant")
         
-        selected_user_key = st.selectbox("Active Account Context:", list(CUSTOMER_DATABASE.keys()))
+        # Round Radio Buttons placed inside an Expandable Dropdown Container
+        with st.expander("🔽 Active Account Context (Click to Select Customer)", expanded=True):
+            selected_user_key = st.radio(
+                "Select Active Customer Profile:",
+                options=list(CUSTOMER_DATABASE.keys()),
+                index=0
+            )
+            
         cust_profile = CUSTOMER_DATABASE[selected_user_key]
 
         st.caption(f"**Customer ID:** {cust_profile['customer_id']} | **Platform:** `{cust_profile['platform']}`")
