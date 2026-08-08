@@ -1,0 +1,14 @@
+.env
+*.env
+
+# SQLite Database & Temp Files
+data/*.db
+data/temp_uploads/*
+
+# Python Virtual Environment & Cache
+venv/
+__pycache__/
+*.pyc
+
+# OS generated files
+.DS_Store

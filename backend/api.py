@@ -7,6 +7,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
 
+from dotenv import load_dotenv
+
+# Load variables from .env file
+load_dotenv()
+
+api_key = os.getenv("GEMINI_API_KEY")
+
 from backend.agents.graph import claim_processing_graph
 from backend.db.storage_handler import (
     save_claim_to_db, 
